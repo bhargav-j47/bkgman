@@ -1,7 +1,8 @@
-# bkgman -bhargav's package manager
+## bkgman -bhargav's package manager
 
-## this is custom package manager for the lfs linux from scratch build inspired from arch-pacman and makepkg
+### this is custom package manager for the lfs linux from scratch build inspired from arch-pacman and makepkg
 
-###current features
+#### current features
 -fakeroot based installation using JPKGBUILD
 -dependacy check (no automatic resolution available currently)
+
