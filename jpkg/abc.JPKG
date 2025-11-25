@@ -1,0 +1,19 @@
+name=custom-echo
+ver=1.1
+desc="a custom echo command made in cpp for wlug DM"
+depends=('bash')
+makedepends=('gcc' 'git')
+license=('mit')
+
+source=("git+https://github.com/bhargav-j47/custom-echo.git")
+
+build() {
+	cd "custom-echo"
+	g++ ./pkg.cpp -o ./pkg
+}
+
+package() {
+	cd "custom-echo"
+	install -Dm755 ./pkg /$PKGDIR/usr/bin/$name
+}
+

@@ -1,0 +1,147 @@
+#!/bin/bash
+set -e
+pkgfile=$1
+
+if [ ! -f "$pkgfile" ]; then 
+    echo "Error JPKG file not found in current folder"
+    exit
+fi
+
+source "$pkgfile"
+
+WORKDIR="$(pwd)/$name-$ver"
+SRCDIR="$WORKDIR/src"
+PKGDIR="$WORKDIR/pkg"
+FINALDIR="$WORKDIR/$name-$ver.tar.gz"
+
+mkdir -p {$WORKDIR,$SRCDIR,$PKGDIR}
+
+echo "checking JPKG file..."
+
+REQUIRED_VARS=("name" "ver" "desc" "depends" "source")
+
+for var in "${REQUIRED_VARS[@]}"; do
+    if [ -z "${!var}" ]; then
+        echo "❌ Error: Variable '$var' is missing in JPkg file."
+        exit 1
+    fi
+done
+
+if ! type -t build >/dev/null; then
+    echo "❌ Error: Your JPkg file is missing the 'build()' function."
+    exit 1
+fi
+
+if ! type -t package  >/dev/null; then
+    echo "❌ Error: Your JPkg file is missing the 'package()' function."
+    exit 1
+fi
+
+echo "✅ Pkgfile is valid. starting build process"
+
+#to be done
+
+enter_fakeroot(){
+    echo "entering fakeroot..."
+    echo "work to be done"
+}
+
+download_pkg(){ 
+    echo "retrieving pkg source..."
+    cd "$SRCDIR"
+    url=${source[0]}
+
+    if [[ "$url" == git+* ]]; then
+        git clone "${url#git+}"
+    else 
+        wget "$url"
+    fi
+}
+
+prepare_pkg(){
+    if type -t prepare > /dev/null ;then
+        cd "$SRCDIR"
+        prepare
+    fi
+}
+
+build_pkg(){
+    cd "$SRCDIR"
+    echo "building $name-$ver"
+    build
+}
+
+install_pkg(){
+    cd "$SRCDIR"
+    package
+}
+
+write_info(){
+    echo "Generating .JPKGINFO..."
+    cd "$PKGDIR"
+    {
+        echo "pkgname = $name"
+        echo "pkgver = $ver"
+        echo "pkgdesc = $desc"
+        echo "builddate = $(date -u)"
+        echo "size = $(du -sk | awk '{print $1}')"
+        
+        printf "depends=("
+        for dep in "${depends[@]}"; do
+            #echo "depend = $dep"
+            printf "'%s'" "$dep"
+        done
+        printf ")\n"
+        
+        printf "makedepends=("
+        for dep in "${makedepends[@]}"; do
+            #echo "depend = $dep"
+            printf "'%s'" "$dep"
+        done
+        printf ")\n"
+    } > .JPKGINFO
+}
+
+write_hooks(){
+    echo "generating hooks"
+    cd "$PKGDIR"
+    
+    hooks=("pre_install" "post_install" "pre_update" "post_update" "preremove" "postremove")
+    
+    touch .HOOKS
+    
+    for hook in "${hooks[@]}"; do
+        declare $hook >> .HOOKS
+    done
+    
+}
+
+archive_pkg(){
+    echo "creating $FINALDIR..."
+    cd "$PKGDIR"
+    tar -czf "$FINALDIR" .
+}
+
+clean(){
+    echo "pkg built successfully exiting ..."
+}
+
+
+download_pkg
+prepare_pkg
+build_pkg
+enter_fakeroot
+install_pkg
+write_info
+write_hooks
+archive_pkg
+clean
+
+
+
+
+
+
+
+
+

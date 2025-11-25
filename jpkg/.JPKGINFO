@@ -1,0 +1,9 @@
+pkgname = custom-echo
+pkgver = 1.1
+pkgdesc = a custom echo command made in cpp for wlug DM
+builddate = Tuesday 25 November 2025 08:20:29 PM UTC
+size = 216
+depend = gcc
+depend = git
+depend = gcc
+depend = git

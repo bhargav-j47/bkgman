@@ -1,0 +1,35 @@
+#maintainer : optional
+
+name= 
+ver= 
+desc= 
+depends=()
+makedepends=() optional
+licence= optional
+changelog= optional
+
+
+source=("source url")
+
+#required functions
+build()
+package()
+
+#optional functions
+
+prepare()
+
+preinstall()
+postinstall()
+
+preupgrade()
+postupgrade()
+
+preremove()
+postremove()
+
+
+
+  
+
+
