@@ -1,0 +1,11 @@
+bkgman 
+
+-S install
+-Su update
+-Ss from source i.e jpkgbuild
+-St from tar.gz
+
+-R remove 
+
+
+-Q query
