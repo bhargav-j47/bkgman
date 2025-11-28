@@ -22,22 +22,22 @@ REQUIRED_VARS=("name" "ver" "desc" "depends" "source")
 
 for var in "${REQUIRED_VARS[@]}"; do
     if [ -z "${!var}" ]; then
-        echo "❌ Error: Variable '$var' is missing in JPkg file."
+        echo "Error: Variable '$var' is missing in JPkg file."
         exit 1
     fi
 done
 
 if ! type -t build >/dev/null; then
-    echo "❌ Error: Your JPkg file is missing the 'build()' function."
+    echo "Error: Your JPkg file is missing the 'build()' function."
     exit 1
 fi
 
 if ! type -t package  >/dev/null; then
-    echo "❌ Error: Your JPkg file is missing the 'package()' function."
+    echo "Error: Your JPkg file is missing the 'package()' function."
     exit 1
 fi
 
-echo "✅ Pkgfile is valid. starting build process"
+echo "Pkgfile is valid. starting build process"
 
 #to be done
 
@@ -65,7 +65,7 @@ prepare_pkg(){
     fi
 }
 
-build_pkg(){
+build_pkg(){ 
     cd "$SRCDIR"
     echo "building $name-$ver"
     build
@@ -79,7 +79,12 @@ install_pkg(){
 write_info(){
     echo "Generating .JPKGINFO..."
     cd "$PKGDIR"
-    {
+    {   
+        
+        if [ ! -z $maintainer ]; then
+            echo "mainter = $maintainer"
+        fi
+
         echo "pkgname = $name"
         echo "pkgver = $ver"
         echo "pkgdesc = $desc"

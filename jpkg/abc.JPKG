@@ -1,3 +1,5 @@
+maintainer=bhargavj
+
 name=custom-echo
 ver=1.1
 desc="a custom echo command made in cpp for wlug DM"
