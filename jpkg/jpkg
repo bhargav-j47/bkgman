@@ -2,6 +2,7 @@
 set -e
 pkgfile=$1
 
+
 if [ ! -f "$pkgfile" ]; then 
     echo "Error JPKG file not found in current folder"
     exit
@@ -16,34 +17,39 @@ FINALDIR="$WORKDIR/$name-$ver.tar.gz"
 
 mkdir -p {$WORKDIR,$SRCDIR,$PKGDIR}
 
-echo "checking JPKG file..."
+check_pkgbuild(){
+    echo "checking JPKG file..."
 
-REQUIRED_VARS=("name" "ver" "desc" "depends" "source")
+    REQUIRED_VARS=("name" "ver" "desc" "depends" "source")
 
-for var in "${REQUIRED_VARS[@]}"; do
-    if [ -z "${!var}" ]; then
-        echo "Error: Variable '$var' is missing in JPkg file."
+    for var in "${REQUIRED_VARS[@]}"; do
+        if [ -z "${!var}" ]; then
+            echo "Error: Variable '$var' is missing in JPkg file."
+            exit 1
+        fi
+    done
+
+    if ! type -t build >/dev/null; then
+        echo "Error: Your JPkg file is missing the 'build()' function."
         exit 1
     fi
-done
 
-if ! type -t build >/dev/null; then
-    echo "Error: Your JPkg file is missing the 'build()' function."
-    exit 1
-fi
+    if ! type -t package  >/dev/null; then
+        echo "Error: Your JPkg file is missing the 'package()' function."
+        exit 1
+    fi
 
-if ! type -t package  >/dev/null; then
-    echo "Error: Your JPkg file is missing the 'package()' function."
-    exit 1
-fi
-
-echo "Pkgfile is valid. starting build process"
-
-#to be done
+    echo "Pkgfile is valid. starting build process"
+}
 
 enter_fakeroot(){
     echo "entering fakeroot..."
-    echo "work to be done"
+    cd "$WORKDIR/../" #just for dev purposes remove at production please
+    SCRIPT_PATH="$(realpath "$0")"
+    fakeroot -- bash "$SCRIPT_PATH" "$pkgfile"
+    echo "leaving fakeroot"
+    clean
+    exit $?
 }
 
 download_pkg(){ 
@@ -132,15 +138,17 @@ clean(){
 }
 
 
-download_pkg
-prepare_pkg
-build_pkg
-enter_fakeroot
-install_pkg
-write_info
-write_hooks
-archive_pkg
-clean
+if [ -z "$FAKEROOTKEY" ]; then   
+    download_pkg
+    prepare_pkg
+    build_pkg
+    enter_fakeroot
+else
+    install_pkg
+    write_info
+    write_hooks
+    archive_pkg
+fi 
 
 
 
