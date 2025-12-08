@@ -10,5 +10,5 @@ int file_exists(const char *path);
 
 char* read_meta_key(const char *filepath, const char*key);
 
-void ensure_dir(const char *path);
+int ensure_dir(const char *path);
 

@@ -1,8 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define INSTALL_ROOT "./build_root" 
-#define DB_PATH      "./bkgman_db"
+#define INSTALL_ROOT "./build_root" //for production replace with "/" 
+#define DB_PATH      "./bkgman_db"  //for production replace with "/var/lib/bkgman"
+#define LOCAL_DB     DB_PATH "/local"
+#define SYNC_DB      DB_PATH "/sync"   
 #define TEMP_DIR    "/tmp/bkgman_tmp"
 
 #define MAX_PATH 1024
