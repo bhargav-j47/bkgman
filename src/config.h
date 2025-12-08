@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define INSTALL_ROOT "./build_root" //for production replace with "/" 
+#define INSTALL_ROOT "./bkgman_root" //for production replace with "/" 
 #define DB_PATH      "./bkgman_db"  //for production replace with "/var/lib/bkgman"
 #define LOCAL_DB     DB_PATH "/local"
 #define SYNC_DB      DB_PATH "/sync"   

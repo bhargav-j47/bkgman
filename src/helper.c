@@ -23,9 +23,8 @@ void print_success(const char *msg) {
 // Execute a shell command safely i want to move fork+exec someday
 int run_command(const char *cmd){
     char fcmd[MAX_PATH*4];
-    //snprintf(fcmd,sizeof(fcmd),"%s 1>/dev/null 2>/dev/null",cmd);
-    snprintf(fcmd,sizeof(fcmd),"%s",cmd);
-    int status = system(fcmd);
+    snprintf(fcmd,sizeof(fcmd),"%s 1>/dev/null 2>/dev/null",cmd);
+    int status = system(cmd);
     return (status == 0);
 }
 
@@ -66,7 +65,7 @@ char* read_meta_key(const char *filepath, const char *key) {
 int ensure_dir(const char* path) {
     char cmd[MAX_PATH + 20];
     //char* real_path= realpath(path,NULL);
-    snprintf(cmd, sizeof(cmd), "mkdir -p \"%s\"", path);
+    snprintf(cmd, sizeof(cmd), "mkdir -p \"%s\" 1>/dev/null 2>/dev/null", path);
     return run_command(cmd);
 }
 

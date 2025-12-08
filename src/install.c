@@ -1,9 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <dirent.h>
 #include "config.h"
 #include "helper.h"
 #include "install.h"
@@ -19,7 +15,7 @@ void install_archive(const char* archive_path){
     char cmd[MAX_LINE*10];
     
     //creating temp
-    snprintf(cmd,sizeof(cmd),"rm -rf %s && mkdir -pv %s",TEMP_DIR,TEMP_DIR);
+    snprintf(cmd,sizeof(cmd),"rm -rf %s && mkdir -pv %s 1>/dev/null 2>/dev/null",TEMP_DIR,TEMP_DIR);
     if(!run_command(cmd)){
         print_error("failed to extract the package");
         exit(1);
@@ -27,7 +23,7 @@ void install_archive(const char* archive_path){
 
     //extract archive to temp
     printf("  --> extracting %s \n",archive_path);
-    snprintf(cmd,sizeof(cmd),"tar -xf \"%s\" -C %s",archive_path,TEMP_DIR);
+    snprintf(cmd,sizeof(cmd),"tar -xf \"%s\" -C %s 1>/dev/null 2>/dev/null",archive_path,TEMP_DIR);
     if(!run_command(cmd)){
         print_error("failed to extract the package");
         exit(1);
@@ -63,7 +59,7 @@ void install_archive(const char* archive_path){
         exit(1);
     }
 
-    snprintf(cmd,sizeof(cmd),"cp %s %s/desc",pkginfo,db_entry);
+    snprintf(cmd,sizeof(cmd),"cp %s %s/desc 1>/dev/null 2>/dev/null",pkginfo,db_entry);
     if(!run_command(cmd)){
         print_error("internal error occured");
         exit(1);
@@ -80,18 +76,20 @@ void install_archive(const char* archive_path){
     
     //installing files to location
     printf("  --> installing files to root\n");
-    snprintf(cmd,sizeof(cmd),"cp -rn %s/* %s/",TEMP_DIR,INSTALL_ROOT);
+    snprintf(cmd,sizeof(cmd),"cp -r %s/ %s/",TEMP_DIR,INSTALL_ROOT);
     if(!run_command(cmd)){
         print_error("installation failed");
         exit(1);
     }
     snprintf(cmd,sizeof(cmd),"rm -rf %s/.JPKGINFO",INSTALL_ROOT);
     run_command(cmd);
+    snprintf(cmd,sizeof(cmd),"rm -rf %s/.HOOKS",INSTALL_ROOT);
+    run_command(cmd);
 
     //cleanup
     printf("  --> cleaning up\n");
-    //snprintf(cmd,sizeof(cmd),"rm -rf %s",TEMP_DIR);
-    //run_command(cmd);
+    snprintf(cmd,sizeof(cmd),"rm -rf %s",TEMP_DIR);
+    run_command(cmd);
     
     char success_msg[MAX_LINE];
     snprintf(success_msg, sizeof(success_msg), "Installed %s-%s", pkgname, pkgver);
