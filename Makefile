@@ -1,7 +1,7 @@
 #Configuration
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -Isrc
-PREFIX ?= /usr/
+PREFIX ?= /usr
 
 #Directories
 BUILD_DIR = build
@@ -14,7 +14,7 @@ OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 HEADERS = $(wildcard $(SRC_DIR)/*.h)
 
 #Tasks
-.PHONY: all build clean install
+.PHONY: all build clean install uninstall
 
 all: build
 
@@ -40,4 +40,10 @@ install: build
 	cp jpkg/jpkg $(PREFIX)/bin/jpkg
 	chmod 755 $(PREFIX)/bin/bkgman
 	chmod 755 $(PREFIX)/bin/jpkg
+
+uninstall:
+	@echo "Uninstalling...."
+	rm $(PREFIX)/bin/bkgman
+	rm $(PREFIX)/bin/jpkg
+ 	
 	
