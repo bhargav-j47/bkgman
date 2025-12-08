@@ -37,4 +37,7 @@ install: build
 	@echo "Installing..."
 	mkdir -p $(PREFIX)/bin
 	cp $(TARGET) $(PREFIX)/bin/bkgman
+	cp jpkg/jpkg $(PREFIX)/bin/jpkg
 	chmod 755 $(PREFIX)/bin/bkgman
+	chmod 755 $(PREFIX)/bin/jpkg
+	
