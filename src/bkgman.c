@@ -1,4 +1,4 @@
-/**
+/*
  *  bkgman : bhargav's package manager
  *  A custom package manager for lfs written in c inspired from Arch-pacman
  *
@@ -15,7 +15,6 @@
 #include <string.h>
 #include <unistd.h>
 #include "helper.h"
-#include "config.h"
 #include "install.h"
 #include "remove.h"
 #include "query.h"

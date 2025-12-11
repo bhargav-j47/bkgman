@@ -1,9 +1,9 @@
-#Configuration
+#Config
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -Isrc
 PREFIX ?= /usr
 
-#Directories
+#Diirs
 BUILD_DIR = build
 SRC_DIR = src
 TARGET = $(BUILD_DIR)/bkgman
@@ -18,7 +18,6 @@ HEADERS = $(wildcard $(SRC_DIR)/*.h)
 
 all: $(TARGET)
 
-# Linking Rule
 $(TARGET): $(OBJS)
 	@echo "Linking..."
 	$(CC) $(CFLAGS) $(OBJS) -o $@
