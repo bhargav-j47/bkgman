@@ -4,7 +4,6 @@
 #include "helper.h"
 #include "query.h"
 
-
 void query_package(const char* pkgname){
     //checks from db later check from sync as well
     char pkg_db[MAX_PATH];
