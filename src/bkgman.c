@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "helper.h"
 #include "config.h"
 #include "install.h"
@@ -32,6 +33,16 @@ void print_usage(){
 }
 
 int main(int argc,char* argv[]){
+    
+    if (geteuid() != 0) {
+        fprintf(stderr, "Error: This command requires root privileges.\n");
+        fprintf(stderr, "Please try: sudo %s ...\n", "your_program_name");
+        return 1;
+    }
+
+    if(argc<2){
+        print_info("bkgman : bhargav's package manager");
+    }
  
     char* op=argv[1];
     
