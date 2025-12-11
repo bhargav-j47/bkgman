@@ -22,26 +22,17 @@ void uninstall_files(char** files,int cnt){
         const char *fpath = files[i];
         struct stat file_stat;
 
-        //printf("%s\n",fpath);
-
         if(lstat(fpath, &file_stat) == -1){
             continue;
         }
-
         if(S_ISDIR(file_stat.st_mode)){
             if(rmdir(fpath)){
-                //print_error("error removing package");
-                //exit(1);
                 continue;
-            }else{
-                printf("%s\n",fpath);
             }
         }else{
             if(unlink(fpath)){
                 print_error("error removing package");
                 exit(1);
-            }else{
-                printf("%s\n",fpath);
             }
         }
     }
@@ -49,7 +40,7 @@ void uninstall_files(char** files,int cnt){
 
 //*** for pointer to array of array of char i.e pointer to array of string
 int list_files(char*** files,char* files_path){
-    
+   
     FILE* fp=fopen(files_path,"r");
     if(!fp){
         print_error("corrupted package can't remove");
@@ -94,11 +85,15 @@ void remove_package(const char* pkgname){
         exit(1);
     }
 
+    print_info("processing package changes");
+
     //run pre hooks
 
     //create files list
     char** files=NULL;
     int cnt=list_files(&files,files_path);
+
+    printf("  --> removing pkg %s\n",pkgname);
     
     //remove installed files
     if(cnt>1){
