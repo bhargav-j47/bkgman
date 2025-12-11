@@ -92,7 +92,7 @@ void install_archive(const char* archive_path){
     
     //installing files to location
     printf("  --> installing files to root\n");
-    snprintf(cmd,sizeof(cmd),"cp -r %s/ %s/",TEMP_DIR,INSTALL_ROOT);
+    snprintf(cmd,sizeof(cmd),"cp -r %s/. %s/",TEMP_DIR,INSTALL_ROOT);
     if(!run_command(cmd)){
         print_error("installation failed");
         clean_temp(); 
