@@ -4,6 +4,14 @@
 #include "helper.h"
 #include "install.h"
 
+
+void clean_temp(){
+    char cmd[MAX_PATH*5];
+    printf("  --> cleaning up\n");
+    snprintf(cmd,sizeof(cmd),"rm -rf %s",TEMP_DIR);
+    run_command(cmd);
+}
+
 void install_archive(const char* archive_path){
     
     if(!file_exists(archive_path)){
@@ -26,6 +34,7 @@ void install_archive(const char* archive_path){
     snprintf(cmd,sizeof(cmd),"tar -xf \"%s\" -C %s 1>/dev/null 2>/dev/null",archive_path,TEMP_DIR);
     if(!run_command(cmd)){
         print_error("failed to extract the package");
+        clean_temp(); 
         exit(1);
     }
     
@@ -35,6 +44,7 @@ void install_archive(const char* archive_path){
 
     if(!file_exists(pkginfo)){
         print_error("jpkginfo does not exist for pkg");
+        clean_temp(); 
         exit(1);
     }
     
@@ -43,25 +53,30 @@ void install_archive(const char* archive_path){
     
     if(!pkgname || !pkgver){
         print_error("invalid package ");
+        clean_temp(); 
         exit(1);
     }
     
     printf("  --> pkg found %s:%s \n",pkgname,pkgver);
 
-    //check dependencies
-    //resolve dependencies
+    //check dependencies       ;to be done later
+    //resolve dependencies     ;to be done later
+    
+    //run pre hooks
     
     //add db entry
     char db_entry[MAX_PATH];
     snprintf(db_entry,sizeof(db_entry),"%s/%s",LOCAL_DB,pkgname);
     if(!ensure_dir(db_entry)){
         print_error("internal error occured");
+        clean_temp(); 
         exit(1);
     }
 
     snprintf(cmd,sizeof(cmd),"cp %s %s/desc 1>/dev/null 2>/dev/null",pkginfo,db_entry);
     if(!run_command(cmd)){
         print_error("internal error occured");
+        clean_temp(); 
         exit(1);
     }
 
@@ -71,6 +86,7 @@ void install_archive(const char* archive_path){
     snprintf(cmd, sizeof(cmd),"find \"%s/\" ! -name '.HOOKS' ! -name '.JPKGINFO' -printf \"%s/%%P\\n\" > \"%s\" ",TEMP_DIR,INSTALL_ROOT,files_path);
     if(!run_command(cmd)){
         print_error("internal error occured");
+        clean_temp(); 
         exit(1);
     }
     
@@ -79,6 +95,7 @@ void install_archive(const char* archive_path){
     snprintf(cmd,sizeof(cmd),"cp -r %s/ %s/",TEMP_DIR,INSTALL_ROOT);
     if(!run_command(cmd)){
         print_error("installation failed");
+        clean_temp(); 
         exit(1);
     }
     snprintf(cmd,sizeof(cmd),"rm -rf %s/.JPKGINFO",INSTALL_ROOT);
@@ -86,11 +103,10 @@ void install_archive(const char* archive_path){
     snprintf(cmd,sizeof(cmd),"rm -rf %s/.HOOKS",INSTALL_ROOT);
     run_command(cmd);
 
+    //run post hooks
+
     //cleanup
-    printf("  --> cleaning up\n");
-    snprintf(cmd,sizeof(cmd),"rm -rf %s",TEMP_DIR);
-    run_command(cmd);
-    
+    clean_temp(); 
     char success_msg[MAX_LINE];
     snprintf(success_msg, sizeof(success_msg), "Installed %s-%s", pkgname, pkgver);
     print_success(success_msg);

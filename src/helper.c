@@ -17,7 +17,7 @@ void print_success(const char *msg) {
     printf("%s%s==>%s %s\n", COL_BOLD, COL_GREEN, COL_RESET, msg);
 }
 
-// Execute a shell command safely i want to move fork+exec someday
+//i want to move fork+exec someday
 int run_command(const char *cmd){
     char fcmd[MAX_PATH*4];
     snprintf(fcmd,sizeof(fcmd),"%s 1>/dev/null 2>/dev/null",cmd);
@@ -25,13 +25,11 @@ int run_command(const char *cmd){
     return (status == 0);
 }
 
-// Check if a file exists
 int file_exists(const char *path) {
     struct stat buffer;
     return (stat(path, &buffer) == 0);
 }
 
-// Read a specific key from a .JPKGINFO file (format is key = value)
 char* read_meta_key(const char *filepath, const char *key) {
     FILE *fp = fopen(filepath, "r");
     if (!fp) return NULL;
@@ -41,15 +39,14 @@ char* read_meta_key(const char *filepath, const char *key) {
     size_t key_len = strlen(key);
 
     while (fgets(line, sizeof(line), fp)) {
-        // Remove newline
-        line[strcspn(line, "\n")] = 0;
 
-        // Check if line starts with key
+        line[strcspn(line, "\n")] = 0; //removes newline
+
         if (strncmp(line, key, key_len) == 0) {
             char *p = strchr(line, '=');
             if (p) {
-                p++; // Skip '='
-                while (*p == ' ') p++; // Skip spaces
+                p++;
+                while (*p == ' ') p++;
                 result = strdup(p);
                 break;
             }

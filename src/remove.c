@@ -85,7 +85,7 @@ void remove_package(const char* pkgname){
 
     print_info("processing package changes");
 
-    //run pre hooks
+    //run pre hooks     ;to be done later
 
     //create files list
     char** files=NULL;
@@ -103,7 +103,7 @@ void remove_package(const char* pkgname){
         free(files);
     }
 
-    //run post hooks
+    //run post hooks    ;to be done later
 
     //remove entry from db
     char cmd[MAX_PATH*10];

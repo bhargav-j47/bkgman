@@ -23,7 +23,7 @@ void print_usage(){
     
     printf("usage: bkgman <operation> [...]\n");
     printf("operations:\n");
-    printf("  -I, --install <file>     Install package from file\n");
+    printf("  -I, --install <file>  Install package from file\n");
     printf("  -Q, --query <name>    Query package database\n");
     printf("  -R, --remove <name>   Remove package\n");
     printf("  -h, --help            Show this help message\n");
@@ -33,9 +33,9 @@ void print_usage(){
 
 int main(int argc,char* argv[]){
     
-    if (geteuid() != 0) {
+    if(geteuid() != 0){
         fprintf(stderr, "Error: This command requires root privileges.\n");
-        fprintf(stderr, "Please try: sudo %s ...\n", "your_program_name");
+        fprintf(stderr, "Please try: sudo your_program_name...\n");
         return 1;
     }
 
