@@ -122,7 +122,9 @@ write_hooks(){
     touch .HOOKS
     
     for hook in "${hooks[@]}"; do
-        declare $hook >> .HOOKS
+        if [[ $(type -t "$hook") == "function" ]]; then
+            declare -f "$hook" >> .HOOKS
+        fi
     done
     
 }
