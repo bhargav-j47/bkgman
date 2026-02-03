@@ -1,0 +1,56 @@
+#!/bin/bash
+
+#dev defaults
+INSTALL_ROOT="./bkgman_root"
+DB_PATH="./bkgman_db"
+TEMP_DIR="/tmp/bkgman_tmp"
+
+for i in "$@"
+do
+case $i in
+    --prefix=*)
+    INSTALL_ROOT="${i#*=}"
+    shift
+    ;;
+    --db-path=*)
+    DB_PATH="${i#*=}"
+    shift
+    ;;
+    --temp-dir=*)
+    TEMP_DIR="${i#*=}"
+    shift
+    ;;
+    --production) #prod defaults
+    INSTALL_ROOT="/"
+    DB_PATH="/var/lib/bkgman"
+    TEMP_DIR="/tmp/bkgman_tmp"
+    shift
+    ;;
+    --help)
+    echo "Usage: ./configure [OPTION]..."
+    echo "  --prefix=DIR       Set install root"
+    echo "  --db-path=DIR      Set database path"
+    echo "  --temp-dir=DIR     Set temp directory"
+    echo "  --production       Set all paths to production standards (/ and /var/lib/bkgman)"
+    exit 0
+    ;;
+    *)
+
+    echo "Unknown option: $i"
+    exit 1
+    ;;
+esac
+done
+
+echo "Configuring bkgman..."
+echo "  INSTALL_ROOT : $INSTALL_ROOT"
+echo "  DB_PATH      : $DB_PATH"
+echo "  TEMP_DIR     : $TEMP_DIR"
+
+# create config.h using config.h.in by using sed command
+sed -e "s|@INSTALL_ROOT@|$INSTALL_ROOT|g" \
+    -e "s|@DB_PATH@|$DB_PATH|g" \
+    -e "s|@TEMP_DIR@|$TEMP_DIR|g" \
+    ./src/config.h.in > ./src/config.h
+
+echo "Created config.h successfully."
