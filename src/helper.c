@@ -63,3 +63,14 @@ int ensure_dir(const char* path) {
     return run_command(cmd);
 }
 
+int run_hook(const char *path, const char *hook){
+    
+    printf("running %s\n",hook);
+    char cmd[MAX_PATH + 100];
+    snprintf(cmd, sizeof(cmd),"bash -c 'source %s && if declare -F %s > /dev/null; then %s; fi'",path,hook,hook);
+    if(!run_command(cmd)){
+        printf("hook %s failed skipping\n",hook);
+        return 1;
+    }
+    return 0;
+}

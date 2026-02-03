@@ -40,7 +40,9 @@ void install_archive(const char* archive_path){
     
     //check metadata
     char pkginfo[MAX_PATH];
-    snprintf(pkginfo,sizeof(pkginfo),"%s/.JPKGINFO",TEMP_DIR);
+    snprintf(pkginfo,sizeof(pkginfo),"%s/.JPKGINFO",TEMP_DIR); 
+    char hookpath[MAX_PATH];
+    snprintf(hookpath, sizeof(hookpath),"%s/.HOOKS",TEMP_DIR);
 
     if(!file_exists(pkginfo)){
         print_error("jpkginfo does not exist for pkg");
@@ -63,6 +65,7 @@ void install_archive(const char* archive_path){
     //resolve dependencies     ;to be done later
     
     //run pre hooks
+    run_hook(hookpath,"pre_install");
     
     //add db entry
     char db_entry[MAX_PATH];
@@ -79,6 +82,13 @@ void install_archive(const char* archive_path){
         clean_temp(); 
         exit(1);
     }
+    snprintf(cmd,sizeof(cmd),"cp %s %s/hooks 1>/dev/null 2>/dev/null",hookpath,db_entry);
+    if(!run_command(cmd)){
+        print_error("internal error occured");
+        clean_temp(); 
+        exit(1);
+    }
+
 
     //adds all files to files except metadata
     char files_path[MAX_PATH];
@@ -104,6 +114,7 @@ void install_archive(const char* archive_path){
     run_command(cmd);
 
     //run post hooks
+    run_hook(hookpath,"post_install");
 
     //cleanup
     clean_temp(); 

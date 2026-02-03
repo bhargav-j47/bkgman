@@ -12,3 +12,4 @@ char* read_meta_key(const char *filepath, const char*key);
 
 int ensure_dir(const char *path);
 
+int run_hook(const char *path,const char* hook);

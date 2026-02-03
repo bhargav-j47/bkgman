@@ -21,5 +21,13 @@ package() {
 
 pre_install(){
     echo "installing..."
-    
+    echo "pre_install"
+}
+
+post_install(){
+    echo "post"
+}
+
+pre_remove(){
+    echo "pre remove"
 }

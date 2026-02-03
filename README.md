@@ -29,7 +29,7 @@ jpkg                         ; done
 
 to be :
 
-1. implement hooks
+1. implement hooks                  ;done
 2. implement dependency check only
 3. setup sync and mirrors
 4. implement dependency resolution

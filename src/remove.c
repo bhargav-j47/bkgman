@@ -86,6 +86,9 @@ void remove_package(const char* pkgname){
     print_info("processing package changes");
 
     //run pre hooks     ;to be done later
+    char hookpath[MAX_PATH]; 
+    snprintf(hookpath, sizeof(hookpath),"%s/hooks",db_path);
+    run_hook(hookpath,"pre_post");
 
     //create files list
     char** files=NULL;
@@ -104,6 +107,7 @@ void remove_package(const char* pkgname){
     }
 
     //run post hooks    ;to be done later
+    run_hook(hookpath,"pre_remove");
 
     //remove entry from db
     char cmd[MAX_PATH*10];
