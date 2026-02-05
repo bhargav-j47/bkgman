@@ -44,7 +44,7 @@ int main(int argc,char* argv[]){
  
     char* op=argv[1];
     
-    if(strcmp(op,"-I")==0 || strcmp(op,"--install")==0){
+    if(strcmp(op,"-I")==0 || strcmp(op,"--install")==0 || strcmp(op, "-U")){
         if(argc<3){
             print_error("missing package file");
             return 1;
