@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -74,3 +75,28 @@ int run_hook(const char *path, const char *hook){
     }
     return 0;
 }
+
+//not working fix this
+void parse_dep_array(const char* str, char** deps){
+    
+    int p=1;
+    while (str[p]!=')') {
+        while (str[p]!=')' && isspace(str[p])) p++;
+    
+        if(str[p]=='\''){
+            char dep[100];
+            int x=0;
+            while (str[p]!='\'') {
+                dep[x]=str[p++];x++;
+            }
+            dep[x]='\0';
+            printf("%s",dep);
+        }
+    }
+}
+
+//implement this
+void free_dep_array(char** deps){
+    return;
+}
+

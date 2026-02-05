@@ -54,7 +54,7 @@ int main(int argc,char* argv[]){
     }
     else if(strcmp(op,"-Q")==0 || strcmp(op,"--query")==0){
         if(argc<3){
-            print_error("missing package file");
+            print_error("missing package name");
             return 1;
         }
         query_package(argv[2]);

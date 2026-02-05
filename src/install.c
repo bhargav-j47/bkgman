@@ -62,6 +62,11 @@ void install_archive(const char* archive_path){
     printf("  --> pkg found %s:%s \n",pkgname,pkgver);
 
     //check dependencies       ;to be done later
+        
+    char* depends_str=read_meta_key(pkginfo, "depends"); //fix this later
+    char** deps=(char**)malloc(sizeof(char*)*100);
+    parse_dep_array(depends_str,deps);
+
     //resolve dependencies     ;to be done later
     
     //run pre hooks

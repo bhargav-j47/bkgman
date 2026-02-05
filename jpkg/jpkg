@@ -74,6 +74,7 @@ prepare_pkg(){
 build_pkg(){ 
     cd "$SRCDIR"
     echo "building $name-$ver"
+    #check make dependency here in someday
     build
 }
 
