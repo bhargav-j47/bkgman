@@ -20,8 +20,8 @@ void print_success(const char *msg) {
 
 //i want to move fork+exec someday
 int run_command(const char *cmd){
-    char fcmd[MAX_PATH*4];
-    snprintf(fcmd,sizeof(fcmd),"%s 1>/dev/null 2>/dev/null",cmd);
+    //char fcmd[MAX_PATH*4];
+    //snprintf(fcmd,sizeof(fcmd),"%s 1>/dev/null 2>/dev/null",cmd);
     int status = system(cmd);
     return (status == 0);
 }
