@@ -30,6 +30,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 clean:
 	rm -rf $(BUILD_DIR)
 	rm -f  $(SRC_DIR)/config.h
+	rm -rf ./.cache
 
 install: $(TARGET)
 	@echo "Installing..."

@@ -13,6 +13,19 @@ void clean_temp(){
     run_command(cmd);
 }
 
+int check_dependecies(char** deps,int deps_cnt,char** missing_deps){
+    int missing_deps_cnt=0;
+    char* dep_path=(char*)malloc(sizeof(char)*MAX_PATH);
+        for (int i=0; i<deps_cnt; i++){
+            snprintf(dep_path,sizeof(char)*MAX_PATH,"%s/%s",LOCAL_DB,deps[i]);
+            if(!file_exists(dep_path)){
+                missing_deps[missing_deps_cnt++]=strdup(deps[i]);
+            }
+        } 
+    free(dep_path);
+    return missing_deps_cnt;
+}
+
 void install_archive(const char* archive_path){
     
     if(!file_exists(archive_path)){
@@ -62,23 +75,12 @@ void install_archive(const char* archive_path){
     
     printf("  --> pkg found %s:%s \n",pkgname,pkgver);
 
-    //check dependencies       ;doing this
-        
+    //check dependencies   
     char* depends_str=read_meta_key(pkginfo, "depends");
     char** deps=(char**)malloc(sizeof(char*)*100);
     int deps_cnt=parse_dep_array(depends_str,deps);
-    
     char** missing_deps=(char**)malloc(sizeof(char*)*100);
-    int missing_deps_cnt=0;
-
-    char* dep_path=(char*)malloc(sizeof(char)*MAX_PATH);
-    for (int i=0; i<deps_cnt; i++){
-        snprintf(dep_path,sizeof(char)*MAX_PATH,"%s/%s",LOCAL_DB,deps[i]);
-        if(!file_exists(dep_path)){
-            missing_deps[missing_deps_cnt++]=strdup(deps[i]);
-        }
-    } 
-    free(dep_path);
+    int missing_deps_cnt=check_dependecies(deps, deps_cnt, missing_deps);
 
     if(missing_deps_cnt!=0){
         print_info("following dependencies are missing && needed to install pkg");
@@ -88,14 +90,25 @@ void install_archive(const char* archive_path){
         printf("\n");
     }
 
-    free_dep_array(deps, deps_cnt);
-    free(deps);
-
     //resolve dependencies     ;to be done later 
     
+    /* //add after resolve dependencies is done
+    missing_deps_cnt=check_dependecies(deps, deps_cnt, missing_deps);
+    if(missing_deps_cnt!=0){
+        print_info("following dependencies are still missing && needed to install pkg");
+        for (int i=0; i<missing_deps_cnt; i++) {
+            printf("%s ",missing_deps[i]);
+        }
+        printf("\n");
+        exit(1);
+    }
+    */
 
+    free_dep_array(deps, deps_cnt);
+    free(deps);
     free_dep_array(missing_deps, missing_deps_cnt);
     free(missing_deps);
+    
     //run pre hooks
     run_hook(hookpath,"pre_install");
     

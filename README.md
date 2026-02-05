@@ -30,6 +30,6 @@ jpkg                         ; done
 to be :
 
 1. implement hooks                  ;done
-2. implement dependency check only
+2. implement dependency check only  ;done but currently doesnt check version yet
 3. setup sync and mirrors
 4. implement dependency resolution
