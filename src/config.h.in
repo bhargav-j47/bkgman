@@ -1,6 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+/*
+ * Do not change following file use configure script to make changes in bkgman paths
+ */
+
 #define INSTALL_ROOT "@INSTALL_ROOT@" //for production replace with "/" 
 #define DB_PATH      "@DB_PATH@"  //for production replace with "/var/lib/bkgman"
 #define LOCAL_DB     DB_PATH "/local"

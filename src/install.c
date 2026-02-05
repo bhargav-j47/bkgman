@@ -3,6 +3,7 @@
 #include "config.h"
 #include "helper.h"
 #include "install.h"
+#include <string.h>
 
 
 void clean_temp(){
@@ -61,14 +62,40 @@ void install_archive(const char* archive_path){
     
     printf("  --> pkg found %s:%s \n",pkgname,pkgver);
 
-    //check dependencies       ;to be done later
+    //check dependencies       ;doing this
         
-    char* depends_str=read_meta_key(pkginfo, "depends"); //fix this later
+    char* depends_str=read_meta_key(pkginfo, "depends");
     char** deps=(char**)malloc(sizeof(char*)*100);
-    parse_dep_array(depends_str,deps);
-
-    //resolve dependencies     ;to be done later
+    int deps_cnt=parse_dep_array(depends_str,deps);
     
+    char** missing_deps=(char**)malloc(sizeof(char*)*100);
+    int missing_deps_cnt=0;
+
+    char* dep_path=(char*)malloc(sizeof(char)*MAX_PATH);
+    for (int i=0; i<deps_cnt; i++){
+        snprintf(dep_path,sizeof(char)*MAX_PATH,"%s/%s",LOCAL_DB,deps[i]);
+        if(!file_exists(dep_path)){
+            missing_deps[missing_deps_cnt++]=strdup(deps[i]);
+        }
+    } 
+    free(dep_path);
+
+    if(missing_deps_cnt!=0){
+        print_info("following dependencies are missing && needed to install pkg");
+        for (int i=0; i<missing_deps_cnt; i++) {
+            printf("%s ",missing_deps[i]);
+        }
+        printf("\n");
+    }
+
+    free_dep_array(deps, deps_cnt);
+    free(deps);
+
+    //resolve dependencies     ;to be done later 
+    
+
+    free_dep_array(missing_deps, missing_deps_cnt);
+    free(missing_deps);
     //run pre hooks
     run_hook(hookpath,"pre_install");
     

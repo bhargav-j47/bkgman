@@ -77,26 +77,45 @@ int run_hook(const char *path, const char *hook){
 }
 
 //not working fix this
-void parse_dep_array(const char* str, char** deps){
+int parse_dep_array(const char* str, char** deps){
     
-    int p=1;
-    while (str[p]!=')') {
+    int p=0;
+    int dep_cnt=0;
+
+    while (str[p]!='\0'&& str[p]!='(') p++;
+
+    if (str[p]=='(') p++;
+    else return dep_cnt;
+
+    while (str[p]!='\0'&& str[p]!=')') {
+
         while (str[p]!=')' && isspace(str[p])) p++;
-    
+
+        if(str[p]==')')break;
+
+        char dep[100];
+        int x=0;
+
         if(str[p]=='\''){
-            char dep[100];
-            int x=0;
-            while (str[p]!='\'') {
-                dep[x]=str[p++];x++;
+            p++;
+            while (str[p]!='\0' && str[p]!='\'' && str[p]!=')') {
+                dep[x++]=str[p++];
             }
-            dep[x]='\0';
-            printf("%s",dep);
+
+            if (str[p]==')') p++;
         }
+        dep[x]='\0';
+        deps[dep_cnt]=strdup(dep);
+        dep_cnt++;
     }
+    return dep_cnt;
 }
 
 //implement this
-void free_dep_array(char** deps){
+void free_dep_array(char** deps, int cnt){
+    for (int i=0; i<cnt; i++) {
+        free(deps[i]);
+    }
     return;
 }
 
