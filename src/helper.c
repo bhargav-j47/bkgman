@@ -76,7 +76,6 @@ int run_hook(const char *path, const char *hook){
     return 0;
 }
 
-//not working fix this
 int parse_dep_array(const char* str, char** deps){
     
     int p=0;
@@ -111,7 +110,6 @@ int parse_dep_array(const char* str, char** deps){
     return dep_cnt;
 }
 
-//implement this
 void free_dep_array(char** deps, int cnt){
     for (int i=0; i<cnt; i++) {
         free(deps[i]);
